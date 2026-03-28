@@ -80,8 +80,63 @@ def delete_contact():
     cur.close()
     conn.close()
 
+# 5. Удаление
+def delete_contact():
+    info = input("Введите имя или номер для удаления: ")
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("DELETE FROM phonebook WHERE name = %s OR phone = %s;", (info, info))
+    conn.commit()
+    print("Контакт удален (если он существовал).")
+    cur.close()
+    conn.close()
+
+# ТЕПЕРЬ ОНА НА СВОЕМ МЕСТЕ
+def get_users():
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM phonebook ORDER BY id;")
+    rows = cur.fetchall()
+    
+    if not rows:
+        print("\n[!] Телефонная книга пуста.")
+    else:
+        print("\n--- СПИСОК ВСЕХ КОНТАКТОВ ---")
+        for row in rows:
+            print(f"ID: {row[0]} | Имя: {row[1]} | Тел: {row[2]}")
+            
+    cur.close()
+    conn.close()
+
 if __name__ == "__main__":
-    create_table()              # Сначала создаем таблицу (если её нет)
-    import_from_csv('contacts.csv')  # Загружаем контакты из файла
-    print("\n--- Поиск контакта ---")
-    find_contacts()             # Теперь поиск сработает!
+    create_table()
+    
+    while True:
+        print("\n--- PHONEBOOK MENU ---")
+        print("1. Загрузить из CSV")
+        print("2. Добавить контакт вручную")
+        print("3. Найти контакт (поиск)")
+        print("4. Обновить телефон")
+        print("5. Удалить контакт")
+        print("6. Показать всех")
+        print("0. Выход")
+        
+        choice = input("\nВыбери действие: ")
+
+        if choice == '1':
+            import_from_csv('contacts.csv')
+        elif choice == '2':
+            add_contact()
+        elif choice == '3':
+            find_contacts()
+        elif choice == '4':
+            update_contact()
+        elif choice == '5':
+            delete_contact()
+        elif choice == '6':
+            get_users() # Используем твою функцию из первой части или допиши её
+        elif choice == '0':
+            print("Пока!")
+            break
+        else:
+            print("Нет такого варианта, попробуй еще раз.")
