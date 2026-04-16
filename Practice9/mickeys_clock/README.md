@@ -1,0 +1,1 @@
+"A clock that shows real system time using Mickey Mouse hands."

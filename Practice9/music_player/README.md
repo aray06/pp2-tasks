@@ -1,0 +1,1 @@
+"Controls: P (Play), S (Stop), N (Next), B (Back), Q (Quit)."
