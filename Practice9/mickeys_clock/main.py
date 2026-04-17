@@ -1,56 +1,47 @@
 import pygame
 import os
-from clock import get_time_angles
+from clock import get_angles, draw_rotated_hand
 
-# Инициализация Pygame
 pygame.init()
-WIDTH, HEIGHT = 800, 800
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Mickey's Clock")
-clock = pygame.time.Clock()
+W, H = 800, 800
+screen = pygame.display.set_mode((W, H))
+pygame.display.set_caption("Mickey Clock - Small Hands")
 
-# Настройка путей к изображениям
-current_dir = os.path.dirname(__file__)
-image_dir = os.path.join(current_dir, 'images')
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Загрузка фона и руки Микки
-background = pygame.image.load(os.path.join(image_dir, 'mickeyclock.jpeg'))
-background = pygame.transform.scale(background, (WIDTH, HEIGHT))
+# 1. Загрузка фона
+bg = pygame.image.load(os.path.join(BASE_DIR, 'images', 'image_2.png')).convert()
+bg = pygame.transform.scale(bg, (W, H))
 
-hand_surf = pygame.image.load(os.path.join(image_dir, 'mickey_hand.png')).convert_alpha()
-# Подбери размер руки под свой фон (например, 50x300)
-hand_surf = pygame.transform.scale(hand_surf, (60, 320))
+# 2. Загрузка и уменьшение рук (теперь они еще компактнее)
+# Правая (минуты)
+img_min = pygame.image.load(os.path.join(BASE_DIR, 'images', 'image_3.png')).convert_alpha()
+img_min = pygame.transform.scale(img_min, (150, 150)) 
+pivot_min = (12, 138) # Координата запястья для нового размера
 
-def blit_rotate_center(surf, image, center, angle):
-    """
-    Вращает изображение вокруг его центра и рисует на экране.
-    """
-    rotated_image = pygame.transform.rotate(image, angle)
-    # Выравниваем центр нового (изменившегося в размере) прямоугольника с центром экрана
-    new_rect = rotated_image.get_rect(center=image.get_rect(center=center).center)
-    surf.blit(rotated_image, new_rect)
+# Левая (секунды)
+img_sec = pygame.image.load(os.path.join(BASE_DIR, 'images', 'image_4.png')).convert_alpha()
+img_sec = pygame.transform.scale(img_sec, (140, 140))
+pivot_sec = (128, 128) # Координата запястья для нового размера
 
-# Главный цикл
 running = True
+clock_timer = pygame.time.Clock()
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
-    # 1. Получаем углы из clock.py
-    min_angle, sec_angle = get_time_angles()
+    angle_min, angle_sec = get_angles()
 
-    # 2. Отрисовка фона
-    screen.blit(background, (0, 0))
+    screen.blit(bg, (0, 0))
+    center_mickey = (W // 2, H // 2)
 
-    # 3. Отрисовка стрелок (центр 400x400)
-    # Минутная стрелка (правая)
-    blit_rotate_center(screen, hand_surf, (WIDTH // 2, HEIGHT // 2), min_angle)
-    
-    # Секундная стрелка (левая)
-    blit_rotate_center(screen, hand_surf, (WIDTH // 2, HEIGHT // 2), sec_angle)
+    # Рисуем руки: сначала секунды, потом минуты
+    draw_rotated_hand(screen, img_sec, center_mickey, pivot_sec, angle_sec)
+    draw_rotated_hand(screen, img_min, center_mickey, pivot_min, angle_min)
 
     pygame.display.flip()
-    clock.tick(60)
+    clock_timer.tick(60)
 
 pygame.quit()
