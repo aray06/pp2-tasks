@@ -1,0 +1,27 @@
+[
+    {
+        "first_name": "aray",
+        "last_name": "yess",
+        "email": "sqswq",
+        "birthday": null,
+        "group": "5",
+        "phones": []
+    },
+    {
+        "first_name": "Artay",
+        "last_name": "A",
+        "email": "artaymq",
+        "birthday": "2006-05-15",
+        "group": "qwe",
+        "phones": [
+            {
+                "phone": "87023265242",
+                "type": "mobile"
+            },
+            {
+                "phone": "87023265242",
+                "type": "work"
+            }
+        ]
+    }
+]
