@@ -1,5 +1,18 @@
 [
     {
+        "first_name": "Aziza",
+        "last_name": "Sarbas",
+        "email": "aziz@aa",
+        "birthday": "2006-04-30",
+        "group": "IS",
+        "phones": [
+            {
+                "phone": "87789961052",
+                "type": "work"
+            }
+        ]
+    },
+    {
         "first_name": "aray",
         "last_name": "yess",
         "email": "sqswq",
